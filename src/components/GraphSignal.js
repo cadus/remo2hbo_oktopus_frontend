@@ -51,7 +51,7 @@ class GraphSignal extends Component {
                         this.props.valueRangeMax , 
 
                     ],
-                    drawPoints: true,
+                    drawPoints: false,
                 });
         } else {
             let dygraphContainerOffsetWidth = document.getElementById('dygraph-container').offsetWidth

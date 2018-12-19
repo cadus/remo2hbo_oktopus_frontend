@@ -19,14 +19,14 @@ class GraphSignal extends Component {
         this.saveSignal();
         this.timerID = setInterval(
             () => this.drawGraph(),
-            100
+            500
         );
       }
 
     componentDidUpdate() {
         //console.log("DidUpdate ", this.props.bioSignalValue);
         this.saveSignal();
-    }    
+    } 
 
     saveSignal() {
         console.log("Save Signal, indexpointer: ", this.indexPointer, this.props.bioSignalType,": ", this.props.bioSignalValue ); 
@@ -38,6 +38,7 @@ class GraphSignal extends Component {
 
     drawGraph() {
         if(this.graph == null) {
+
             this.graph = new Dygraph(
                 this.refs.chart,
                 this.tempData,

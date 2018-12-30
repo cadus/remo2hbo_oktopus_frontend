@@ -32,8 +32,8 @@ class ContrastSwitch extends Component {
     }
 
     render() {
-        let imgBlack = <img onClick={this.handleClick} className="contrastSwitch" align="right" src={contrastIcon} />;
-        let imgWhite = <img onClick={this.handleClick} className="contrastSwitch" align="right" src={contrastIconWhite} />;
+        let imgBlack = <img onClick={this.handleClick} className="header-icons" align="right" src={contrastIcon} />;
+        let imgWhite = <img onClick={this.handleClick} className="header-icons" align="right" src={contrastIconWhite} />;
         if(this.state.isToggleOn) {
             return imgBlack;
         } else {

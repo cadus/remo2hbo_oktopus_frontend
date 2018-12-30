@@ -1,15 +1,14 @@
 import Dygraph from 'dygraphs';
 import React, { Component } from 'react';
-//Änderung: graph und tempData nicht mehr als states, weil egal für Update
-//ComponentDidUpdate funktioniert über props, die von signal reinkommen
 class GraphSignal extends Component {
 
     constructor(props){
         super(props);
         this.indexPointer = 0;
         this.graph = null;
-        this.tempData = [];
+        this.tempData = this.initialData();
     }
+
     render() {
         return <div id="dygraph-container" ref="chart"></div>;
     }
@@ -27,6 +26,16 @@ class GraphSignal extends Component {
         //console.log("DidUpdate ", this.props.bioSignalValue);
         this.saveSignal();
     } 
+    
+    initialData() {
+        let data = [];
+        for (let i = 0; i < 500; i++) {
+            let x = new Date();
+            let y = 0;
+            data.push([x,y]);
+        };
+        return data;
+    }
 
     saveSignal() {
         console.log("Save Signal, indexpointer: ", this.indexPointer, this.props.bioSignalType,": ", this.props.bioSignalValue ); 
@@ -44,21 +53,22 @@ class GraphSignal extends Component {
                 this.tempData,
                 {
                     fillGraph: false,
+                    title: this.props.bioSignalType,
                     labels: ['Time', 'Biosignal'],
                     drawGrid: false,
                     valueRange: [
                         this.props.valueRangeMin , 
                         this.props.valueRangeMax , 
-
                     ],
                     drawPoints: false,
+                    legend: "never",
                 });
         } else {
             let dygraphContainerOffsetWidth = document.getElementById('dygraph-container').offsetWidth
             //display at most around 500 values depending on canvas width
             //ToDo: lost values, e.g. if last update at length 97 and next at 103 and offset =100, values 97,98,99 will be lost because array reduced to size 100
-            if(this.tempData.length >= dygraphContainerOffsetWidth*2){
-                let valuesToBeRemoved = this.tempData.length-dygraphContainerOffsetWidth*2;
+            if(this.tempData.length >= 500){
+                let valuesToBeRemoved = this.tempData.length-500;
                 //delete items from array to remain array.length at length of offsetWidth;
                 this.tempData.splice(0,valuesToBeRemoved);
             }

@@ -4,6 +4,8 @@ import NumericSignal from '../components/NumericSignal'
 //import TestGraph from '../components/TestGraph';
 import GraphSignal from '../components/GraphSignal';
 import ContrastSwitch from '../utils/ContrastSwitch';
+import Settings from '../utils/Settings';
+
 
 class App extends Component {
 
@@ -11,7 +13,6 @@ class App extends Component {
       super(props);
       this.evtSource = new EventSource("http://141.45.146.235:8200");
       this.state = {
-        readyState: "bla",
         connection: "not connected",
         ekg: 0,
         pulse: 0,
@@ -25,26 +26,30 @@ class App extends Component {
     }
   
     componentDidMount() {
-      var that = this;
+      var that = this
       
       this.evtSource.onerror = function (e) {
+        console.log("error: ", e);
         that.setState(Object.assign({}, { connection: "error" }));
       };
 
       this.evtSource.onopen = function (e) {
-        console.log(e);
+        console.log("open: ", e);
+        while(e.srcElement.readyState == 0) {
+          console.log("connecting...");
+          that.setState(Object.assign({}, { connection: "connecting..." }));
+        }
         that.setState(Object.assign({}, { connection: "connected" }));
       };
 
       this.evtSource.close = function (e) {
-        console.log(this.evtSource.readyState);
+        console.log("close: ",this.evtSource.readyState);
         that.setState(Object.assign({}, { connection: "not connected" }));
       };
 
         this.evtSource.addEventListener("ekg", function (e) {
         that.setState(Object.assign({}, { "ekg": e.data}));
         that.ekgData.push(e.data);
-        console.log("EKG-LENGTH: ", that.ekgData.length);
       }, false);
 
       this.evtSource.addEventListener("pulse", function (e) {
@@ -91,46 +96,37 @@ class App extends Component {
           <div id="header">
             OKTOPUS BIOSIGNAL MONITORING
             <ContrastSwitch/>
+            <Settings/>
           </div>
 
           <div id="grid-container">
 
-            {/* //TODO: ANPASSEN VON GRAPH AN ECHTES SIGNAL*/}
-          {/* 
-            <div className="biosignal-EKG"><TestGraph/></div>
-            <div className="biosignal-HR-Graph"><TestGraph/></div>
-            <div className="biosignal-Test-Graph"><TestGraph/></div>
-    */}
-
-    
             <div className="biosignal-EKG">
               <GraphSignal bioSignalType="EKG" bioSignalValue={this.state.ekg} valueRangeMin={-10} valueRangeMax={600} />
             </div>
             <div className="biosignal-HR-Graph">
               <GraphSignal bioSignalType="Pulse" bioSignalValue={this.state.pulse} valueRangeMin={250} valueRangeMax={800}/>
             </div>
-            <div className="biosignal-Test-Graph">
+            <div className="biosignal-placeholder-Graph">
               <GraphSignal bioSignalType="EKG" bioSignalValue={this.state.ekg} valueRangeMin={-10} valueRangeMax={600} />
             </div>
-          
-            
 
             <div className="biosignal-Temp"> 
-              <NumericSignal bioSignalType="°C" bioSignalValue={this.state.temperature} /> 
+              <NumericSignal bioSignalType="Temp °C" bioSignalValue={this.state.temperature} /> 
             </div>
             <div className="biosignal-HR" >
-              <NumericSignal bioSignalType="HR" bioSignalValue={this.state.heartrate} />
+              <NumericSignal bioSignalType="HR / min" bioSignalValue={this.state.heartrate} />
             </div>
             <div className="biosignal-sO2"  >
-              <NumericSignal bioSignalType="sO2" bioSignalValue={this.state.oxygen} />
+              <NumericSignal bioSignalType="spO2 %" bioSignalValue={this.state.oxygen} />
             </div>
             <div  className="biosignal-RR"> 
-              <NumericSignal bioSignalType="RR" bioSignalValue={this.state.diastole} bioSignalValueAddOn={this.state.systole} /> 
+              <NumericSignal bioSignalType="Sys / Dia mmHG" bioSignalValue={this.state.diastole} bioSignalValueAddOn={this.state.systole} /> 
             </div>
 
           </div>
 
-          <div id="footer">status: {this.state.connection}.</div>
+          <div id="footer">connection status: {this.state.connection}.</div>
         </div>
       );
     }

@@ -4,15 +4,24 @@
           box-sizing: border-box;
 }
 
+
+.html {
+  min-height: 100%;
+  max-height: 100%;
+  min-width: 100%;
+  max-width: 100%;
+}
+
 .app-container {
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
-  min-height: 92vh;
-  max-height: 96vh;
-  min-width: 92vw;
-  max-width: 96vw;
+  min-height: 96%;
+  max-height: 96%;
+  min-width: 98%;
+  max-width: 98%;
   margin:auto;
+  overflow: hidden;
 }
 
 #footer {
@@ -30,8 +39,9 @@
   min-height: 6vh;
 }
 
-.contrastSwitch {
+.header-icons {
 display:inline-block;
+padding: 3px;
 max-width: 5vw;
 max-height: 5vh;
 }
@@ -47,7 +57,7 @@ max-height: 5vh;
   #grid-container > div {
     border: 1px solid black;
     min-width: 100%;
-    padding: 10px;
+    padding: 1vmin;
     }
 
   .biosignal-EKG {
@@ -61,11 +71,12 @@ max-height: 5vh;
     
   }
 
-  .biosignal-Test-Graph {
+  .biosignal-placeholder-Graph {
     grid-column: 1 / 2;
     grid-row: 9 / 13; 
   }
-  .biosignal-Test-Graph > div, .biosignal-HR-Graph > div, .biosignal-EKG > div {
+
+  .biosignal-placeholder-Graph > div, .biosignal-HR-Graph > div, .biosignal-EKG > div {
     max-height: 22vh;
     min-height: 22vh;
     min-width:63vw;
@@ -93,7 +104,7 @@ max-height: 5vh;
   .biosignal-RR {
     grid-column: 2 / 3;
     grid-row: 10 / 13; 
-    color: yellow;
+    color: orange;
   }
 
   .bioSignalType {
@@ -105,6 +116,6 @@ max-height: 5vh;
   .bioSignalValue {
     text-align: center;
     font-weight: bold;
-    font-size: 2vw;
+    font-size: 4vmin;
     overflow: hidden;
   }

@@ -21,11 +21,4 @@ class NumericSignal extends React.Component {
 
     }
   }
-/*
-TO DO: ADD SYMBOL FOR BIOSIGNAL TYPE! 
-        <img className="Avatar"
-          src={props.author.avatarUrl}
-          alt={props.author.name}
-        />
-*/
   export default NumericSignal;

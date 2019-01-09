@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import './App.css';
 import NumericSignal from '../components/NumericSignal'
-//import TestGraph from '../components/TestGraph';
 import GraphSignal from '../components/GraphSignal';
 import ContrastSwitch from '../utils/ContrastSwitch';
 import Settings from '../utils/Settings';
+import IconBar from '../utils/IconBar';
+import SettingsModal from '../utils/SettingsModal';
+
 
 
 class App extends Component {
@@ -26,7 +28,7 @@ class App extends Component {
     }
   
     componentDidMount() {
-      var that = this
+      var that = this;
       
       this.evtSource.onerror = function (e) {
         console.log("error: ", e);
@@ -93,12 +95,12 @@ class App extends Component {
 
       return (
         <div className="app-container">
+        <SettingsModal />
           <div id="header">
             OKTOPUS BIOSIGNAL MONITORING
-            <ContrastSwitch/>
-            <Settings/>
+          <IconBar/>
           </div>
-
+          
           <div id="grid-container">
 
             <div className="biosignal-EKG">

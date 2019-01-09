@@ -37,14 +37,21 @@
   font-family: 'Bungee', sans-serif;
   font-size: 3vmin;
   min-height: 6vh;
+  max-height: 6vh;
+  display:inline-block;
+  vertical-align: baseline; 
+}
+
+.iconBar {
+  float: right;
 }
 
 .header-icons {
-display:inline-block;
 padding: 3px;
 max-width: 5vw;
 max-height: 5vh;
 }
+
 #grid-container {
     display: grid;
     grid-template-columns: 3fr 1fr;
@@ -118,4 +125,28 @@ max-height: 5vh;
     font-weight: bold;
     font-size: 4vmin;
     overflow: hidden;
+  }
+
+  .none {
+    display: none;
+  }
+
+  .block {
+    background-color:grey;
+    opacity: 0.3;
+    min-height: 75%;
+    max-height: 80%;
+    min-width: 30%;
+    max-width: 40%;
+    margin-left:50%;
+    float: right;
+    display: block;
+    position: absolute;
+  }
+
+  .dygraph-label.dygraph-title {
+    color: blue;
+    float: left;
+    font-weight: bold;
+    font-size: 2vmin;
   }

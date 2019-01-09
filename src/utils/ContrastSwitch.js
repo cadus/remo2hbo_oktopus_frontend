@@ -7,8 +7,10 @@ import contrastIconWhite from '../images/contrastIcon_white.png';
 class ContrastSwitch extends Component {
     constructor(props) {
       super(props);
-      this.state = {isToggleOn: true};
-  
+      this.state = {
+        isToggleOn: true
+      };
+      this.contrastIcon = <img onClick={this.handleClick} className="header-icons"  src={contrastIcon} />;
       // This binding is necessary to make `this` work in the callback
       this.handleClick = this.handleClick.bind(this);
     }
@@ -21,12 +23,12 @@ class ContrastSwitch extends Component {
         let elems = [];
         elems = document.getElementById('grid-container').childNodes;
         for (let e of elems) {
-            e.style = 'background-color: black;';;
+            e.style = 'background-color: black;';
         }
       } else {
         let elems = document.getElementById('grid-container').childNodes;
         for (let e of elems) {
-            e.style = 'background-color: white;';;
+            e.style = 'background-color: white;';
         }
       }
     }
@@ -35,10 +37,11 @@ class ContrastSwitch extends Component {
         let imgBlack = <img onClick={this.handleClick} className="header-icons" align="right" src={contrastIcon} />;
         let imgWhite = <img onClick={this.handleClick} className="header-icons" align="right" src={contrastIconWhite} />;
         if(this.state.isToggleOn) {
-            return imgBlack;
+          this.contrastIcon = imgBlack;
         } else {
-            return imgWhite;
+          this.contrastIcon = imgWhite;
         }
+        return this.contrastIcon;
     }
   }
 

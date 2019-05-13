@@ -15,7 +15,7 @@
     "url": "git+https://git.tools.f4.htw-berlin.de/akreichgauer/oktopus_frontend.git"
   },
   "author": "Andrea Kreichgauer",
-  "license": "ISC",
+  "license": "AGPL-3.0",
   "bugs": {
     "url": "https://git.tools.f4.htw-berlin.de/akreichgauer/oktopus_frontend.git/issues"
   },

@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 class NumericSignal extends React.Component {
 
     render() {
+      console.log(this.props.bioSignalValue);
       if (this.props.bioSignalType == "RR"){
         return (
         <div>

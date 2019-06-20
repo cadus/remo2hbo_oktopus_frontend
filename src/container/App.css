@@ -24,6 +24,15 @@
   overflow: hidden;
 }
 
+.dark-contrast * {
+  border-color: white !important;
+}
+
+.dark-contrast > * {
+  background: black !important;
+  color: white !important;
+}
+
 #footer {
   border-style: dashed none none none;
   flex: 1;
@@ -39,7 +48,7 @@
   min-height: 6vh;
   max-height: 6vh;
   display:inline-block;
-  vertical-align: baseline; 
+  vertical-align: baseline;
 }
 
 .iconBar {
@@ -69,18 +78,18 @@ max-height: 5vh;
 
   .biosignal-EKG {
     grid-column: 1 / 2;
-    grid-row: 1 / 5; 
+    grid-row: 1 / 5;
   }
 
   .biosignal-HR-Graph {
     grid-column: 1 / 2;
-    grid-row: 5 / 9; 
-    
+    grid-row: 5 / 9;
+
   }
 
   .biosignal-placeholder-Graph {
     grid-column: 1 / 2;
-    grid-row: 9 / 13; 
+    grid-row: 9 / 13;
   }
 
   .biosignal-placeholder-Graph > div, .biosignal-HR-Graph > div, .biosignal-EKG > div {
@@ -92,25 +101,25 @@ max-height: 5vh;
 
   .biosignal-Temp {
     grid-column: 2 / 3;
-    grid-row: 1 / 4; 
+    grid-row: 1 / 4;
     color: red;
   }
 
   .biosignal-HR {
     grid-column: 2 / 3;
-    grid-row: 4 / 7; 
+    grid-row: 4 / 7;
     color: greenyellow;
   }
 
   .biosignal-sO2 {
     grid-column: 2 / 3;
-    grid-row: 7 / 10; 
+    grid-row: 7 / 10;
     color: cyan;
   }
 
   .biosignal-RR {
     grid-column: 2 / 3;
-    grid-row: 10 / 13; 
+    grid-row: 10 / 13;
     color: orange;
   }
 

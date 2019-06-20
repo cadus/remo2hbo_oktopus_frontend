@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import contrastIcon from '../images/contrastIcon.png';
 import contrastIconWhite from '../images/contrastIcon_white.png';
 
+//diese Komponente wird gar nicht mehr benutzt und ist auch nicht im Sinn von React aufgebaut.
+
 
 
 class ContrastSwitch extends Component {
@@ -14,7 +16,7 @@ class ContrastSwitch extends Component {
       // This binding is necessary to make `this` work in the callback
       this.handleClick = this.handleClick.bind(this);
     }
-  
+
     handleClick() {
       this.setState(state => ({
         isToggleOn: !state.isToggleOn
@@ -46,4 +48,3 @@ class ContrastSwitch extends Component {
   }
 
   export default ContrastSwitch;
-  

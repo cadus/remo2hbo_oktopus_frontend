@@ -26,8 +26,8 @@ class GraphSignal extends Component {
     componentDidUpdate() {
         //console.log("DidUpdate ", this.props.bioSignalValue);
         this.saveSignal();
-    } 
-    
+    }
+
     initialData() {
         let data = [];
         for (let i = 0; i < 500; i++) {
@@ -39,7 +39,7 @@ class GraphSignal extends Component {
     }
 
     saveSignal() {
-        //console.log("Save Signal, indexpointer: ", this.indexPointer, this.props.bioSignalType,": ", this.props.bioSignalValue ); 
+        //console.log("Save Signal, indexpointer: ", this.indexPointer, this.props.bioSignalType,": ", this.props.bioSignalValue );
         //console.log("saveSignal ", this.props.bioSignalType);
         let x = new Date();
         let y = Number(this.props.bioSignalValue);
@@ -58,8 +58,8 @@ class GraphSignal extends Component {
                     labels: ['Time', 'Biosignal'],
                     drawGrid: false,
                     valueRange: [
-                        this.props.valueRangeMin , 
-                        this.props.valueRangeMax , 
+                        this.props.valueRangeMin ,
+                        this.props.valueRangeMax ,
                     ],
                     axisLineColor: "white",
                     color: "blue",
@@ -69,7 +69,7 @@ class GraphSignal extends Component {
                 });
         } else {
             let dygraphContainerOffsetWidth = document.getElementById('dygraph-container').offsetWidth
-            console.log("width: ",dygraphContainerOffsetWidth);
+          //console.log("width: ",dygraphContainerOffsetWidth);
             //display at most around 500 values depending on canvas width
             //ToDo: lost values, e.g. if last update at length 97 and next at 103 and offset =100, values 97,98,99 will be lost because array reduced to size 100
             if(this.tempData.length >= 500){

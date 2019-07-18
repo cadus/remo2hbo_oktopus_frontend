@@ -57,6 +57,10 @@ max-width: 5vw;
 max-height: 5vh;
 }
 
+.red {
+  color: red;
+}
+
 #grid-container {
     display: grid;
     grid-template-columns: 3fr 1fr;
@@ -98,7 +102,7 @@ max-height: 5vh;
   .biosignal-Temp {
     grid-column: 2 / 3;
     grid-row: 1 / 4;
-    color: red;
+    color: black;
   }
 
   .biosignal-HR {

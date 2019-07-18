@@ -16,13 +16,13 @@ class App extends Component {
       this.evtSource = new EventSource(EVENT_STREAM_ADDRESS);
       this.state = {
         connection: "not connected",
-        ekg: {min: 0, max: 0, current: 0},
-        pulse: {min: 0, max: 0, current: 0},
-        temperature: {min: 0, max: 0, current: 0},
-        oxygen: {min: 0, max: 0, current: 0},
-        heartrate: {min: 0, max: 0, current: 0},
-        systole: {min: 0, max: 0, current: 0},
-        diastole: {min: 0, max: 0, current: 0},
+        ekg: {min: 20, max: 80, current: 0},
+        pulse: {min: 20, max: 80, current: 0},
+        temperature: {min: 20, max: 80, current: 0},
+        oxygen: {min: 20, max: 80, current: 0},
+        heartrate: {min: 20, max: 80, current: 0},
+        systole: {min: 20, max: 80, current: 0},
+        diastole: {min: 20, max: 80, current: 0},
         showDarkContrast: false,
       };
     }
@@ -81,6 +81,10 @@ class App extends Component {
     }
   }
 
+  isCritical(vitalSign) {
+    return this.state[vitalSign].current<this.state[vitalSign].min || this.state[vitalSign].current>this.state[vitalSign].max;
+  }
+
   render() {
 
     return (
@@ -93,7 +97,12 @@ class App extends Component {
         <div id="grid-container">
 
           <div className="biosignal-EKG">
-            <GraphSignal bioSignalType="EKG" bioSignalValue={this.state.ekg.current} valueRangeMin={-10} valueRangeMax={600} />
+
+            <GraphSignal
+            bioSignalType="EKG"
+            warning={this.isCritical('ekg')}
+            bioSignalValue={this.state.ekg.current}
+            valueRangeMin={-10} valueRangeMax={600} />
           </div>
           <div className="biosignal-HR-Graph">
             <GraphSignal bioSignalType="Pulse" bioSignalValue={this.state.pulse.current} valueRangeMin={0} valueRangeMax={800}/>
@@ -103,7 +112,11 @@ class App extends Component {
           </div>
 
           <div className="biosignal-Temp">
-            <NumericSignal bioSignalType="Temp °C" bioSignalValue={this.state.temperature.current} />
+            <NumericSignal
+              bioSignalType="Temp °C"
+              warning={this.isCritical('temperature')}
+              bioSignalValue={this.state.temperature.current}
+            />
           </div>
           <div className="biosignal-HR" >
             <NumericSignal bioSignalType="HR / min" bioSignalValue={this.state.heartrate.current} />

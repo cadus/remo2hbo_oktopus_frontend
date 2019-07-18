@@ -62,7 +62,7 @@ class GraphSignal extends Component {
                         this.props.valueRangeMax ,
                     ],
                     axisLineColor: "white",
-                    color: "blue",
+                    color: this.props.warning ? "red" : "blue",
                     drawPoints: false,
                     drawAxis: false,
                     legend: "never",

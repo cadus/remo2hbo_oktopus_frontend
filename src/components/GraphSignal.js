@@ -30,6 +30,10 @@ class GraphSignal extends Component {
     this.saveSignal();
   }
 
+  componentWillUnmount() {
+    this.graph.destroy();
+}
+
   initialData() {
     let data = [];
     for (let i = 0; i < 500; i++) {

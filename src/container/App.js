@@ -91,42 +91,36 @@ class App extends Component {
       <div className="app-container">
       <SettingsModal />
         <div id="header">
-          OKTOPUS BIOSIGNAL MONITORING jo
+          OKTOPUS BIOSIGNAL MONITORING 
         </div>
 
         <div id="grid-container">
 
-          <div className="biosignal-EKG">
-
             <GraphSignal
+            className="biosignal-EKG"
             bioSignalType="EKG"
             warning={this.isCritical('ekg')}
             bioSignalValue={this.state.ekg.current}
             valueRangeMin={-10} valueRangeMax={600} />
-          </div>
-          <div className="biosignal-HR-Graph">
-            <GraphSignal bioSignalType="Pulse" bioSignalValue={this.state.pulse.current} valueRangeMin={0} valueRangeMax={800}/>
-          </div>
-          <div className="biosignal-placeholder-Graph">
-            <GraphSignal bioSignalType="EKG" bioSignalValue={this.state.ekg.current} valueRangeMin={-10} valueRangeMax={600} />
-          </div>
 
-          <div className="biosignal-Temp">
-            <NumericSignal
-              bioSignalType="Temp °C"
-              warning={this.isCritical('temperature')}
-              bioSignalValue={this.state.temperature.current}
-            />
-          </div>
-          <div className="biosignal-HR" >
-            <NumericSignal bioSignalType="HR / min" bioSignalValue={this.state.heartrate.current} />
-          </div>
-          <div className="biosignal-sO2"  >
-            <NumericSignal bioSignalType="spO2 %" bioSignalValue={this.state.oxygen.current} />
-          </div>
-          <div  className="biosignal-RR">
-            <NumericSignal bioSignalType="Sys / Dia mmHG" bioSignalValue={this.state.diastole.current} bioSignalValueAddOn={this.state.systole.current} />
-          </div>
+            <GraphSignal
+              className="biosignal-HR-Graph"
+              bioSignalType="Pulse"
+              warning={this.isCritical('pulse')}
+              bioSignalValue={this.state.pulse.current}
+              valueRangeMin={0} valueRangeMax={800}/>
+
+            <GraphSignal
+              className="biosignal-placeholder-Graph"
+              bioSignalType="EKG"
+              warning={this.isCritical('ekg')}
+              bioSignalValue={this.state.ekg.current}
+              valueRangeMin={-10} valueRangeMax={600} />
+
+            <NumericSignal bioSignalType="Temp °C" warning={this.isCritical('temperature')} bioSignalValue={this.state.temperature.current} className="biosignal-Temp" />
+            <NumericSignal bioSignalType="HR / min" warning={this.isCritical('heartrate')} bioSignalValue={this.state.heartrate.current} className="biosignal-HR" />
+            <NumericSignal bioSignalType="spO2 %" warning={this.isCritical('oxygen')} bioSignalValue={this.state.oxygen.current} className="biosignal-sO2"/>
+            <NumericSignal bioSignalType="Sys / Dia mmHG" warning={this.isCritical('diastole') || this.isCritical('systole')} bioSignalValue={this.state.diastole.current} bioSignalValueAddOn={this.state.systole.current} className="biosignal-RR"/>
 
         </div>
 

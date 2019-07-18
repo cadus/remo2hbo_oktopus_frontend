@@ -12,10 +12,9 @@ renderBioSignalValue() {
 
   render() {
     return (
-      <div className={this.props.warning ? 'red' : ''}>
-      <p className="bioSignalType"> {this.props.bioSignalType} </p>
-      <p className="bioSignalValue"> {this.renderBioSignalValue()}
-      </p>
+      <div className={this.props.className + ' ' + (this.props.warning ? 'red' : '')}>
+        <p className="bioSignalType"> {this.props.bioSignalType} </p>
+        <p className="bioSignalValue"> {this.renderBioSignalValue()}</p>
       </div>
     );
   }

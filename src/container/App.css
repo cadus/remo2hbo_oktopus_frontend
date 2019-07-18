@@ -58,7 +58,7 @@ max-height: 5vh;
 }
 
 .red {
-  color: red;
+  border: 3px solid red !important;
 }
 
 #grid-container {

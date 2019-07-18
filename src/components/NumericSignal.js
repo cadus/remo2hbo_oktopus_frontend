@@ -2,26 +2,23 @@ import React, { Component } from 'react';
 
 class NumericSignal extends React.Component {
 
+renderBioSignalValue() {
+  return (
+    this.props.bioSignalValueAddOn
+      ? this.props.bioSignalValue + " / " + this.props.bioSignalValueAddOn
+      : this.props.bioSignalValue
+  );
+}
 
-
-    render() {
-      console.log(this.props.bioSignalValue);
-      if (this.props.bioSignalType == "RR"){
-        return (
-        <div class={this.props.warning ? 'red' : ''}>
-          <p className="bioSignalType"> {this.props.bioSignalType} </p>
-          <p className="bioSignalValue"> {this.props.bioSignalValue} / {this.props.bioSignalValueAddOn}</p>
-        </div>
-        );
-      } else {
-        return (
-        <div class={this.props.warning ? 'red' : ''}>
-          <p className="bioSignalType"> {this.props.bioSignalType} </p>
-          <p className="bioSignalValue"> {this.props.bioSignalValue} </p>
-        </div>
-        );
-      }
-
-    }
+  render() {
+    return (
+      <div className={this.props.warning ? 'red' : ''}>
+      <p className="bioSignalType"> {this.props.bioSignalType} </p>
+      <p className="bioSignalValue"> {this.renderBioSignalValue()}
+      </p>
+      </div>
+    );
   }
-  export default NumericSignal;
+
+}
+export default NumericSignal;

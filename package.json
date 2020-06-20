@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack-dev-server --config ./webpack.config.js --mode development",
+    "start": "webpack-dev-server --mode development --open",
     "build": "webpack --mode production",
     "dev": "webpack --mode development"
   },
@@ -15,7 +15,7 @@
     "url": "git+https://git.tools.f4.htw-berlin.de/akreichgauer/oktopus_frontend.git"
   },
   "author": "Andrea Kreichgauer",
-  "license": "AGPL-3.0",
+  "license": "ISC",
   "bugs": {
     "url": "https://git.tools.f4.htw-berlin.de/akreichgauer/oktopus_frontend.git/issues"
   },

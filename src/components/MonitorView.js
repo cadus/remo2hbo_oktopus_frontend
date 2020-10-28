@@ -79,23 +79,21 @@ class MonitorView extends Component {
   render() {
     return (
       <div className="app-container">
-        <div id="header">
-          OKTOPUS BIOSIGNAL MONITORING
-        </div>
-
         <div id="grid-container">
             <GraphSignal
-            className="biosignal-EKG"
-            bioSignalType="EKG"
-            warning={this.isCritical('ekg')}
-            bioSignalValue={this.state.ekg.current}
-            valueRangeMin={-10} valueRangeMax={600} />
+              className="biosignal-EKG"
+              bioSignalType="EKG"
+              warning={this.isCritical('ekg')}
+              bioSignalValue={this.state.ekg.current}
+              color='green'
+              valueRangeMin={-10} valueRangeMax={600} />
 
             <GraphSignal
               className="biosignal-HR-Graph"
               bioSignalType="Pulse"
               warning={this.isCritical('pulse')}
               bioSignalValue={this.state.pulse.current}
+              color='lightblue'
               valueRangeMin={0} valueRangeMax={800}/>
 
             <GraphSignal
@@ -103,12 +101,36 @@ class MonitorView extends Component {
               bioSignalType="EKG"
               warning={this.isCritical('ekg')}
               bioSignalValue={this.state.ekg.current}
+              color='orange'
               valueRangeMin={-10} valueRangeMax={600} />
 
-            <NumericSignal bioSignalType="Temp °C" warning={this.isCritical('temperature')} bioSignalValue={this.state.temperature.current} className="biosignal-Temp" />
-            <NumericSignal bioSignalType="HR / min" warning={this.isCritical('heartrate')} bioSignalValue={this.state.heartrate.current} className="biosignal-HR" />
-            <NumericSignal bioSignalType="spO2 %" warning={this.isCritical('oxygen')} bioSignalValue={this.state.oxygen.current} className="biosignal-sO2"/>
-            <NumericSignal bioSignalType="Sys / Dia mmHG" warning={this.isCritical('diastole') || this.isCritical('systole')} bioSignalValue={this.state.diastole.current} bioSignalValueAddOn={this.state.systole.current} className="biosignal-RR"/>
+            <NumericSignal
+              bioSignalType="Temp °C"
+              warning={this.isCritical('temperature')}
+              bioSignalValue={this.state.temperature.current}
+              color='blue'
+              className="biosignal-Temp" />
+
+            <NumericSignal
+              bioSignalType="HR / min"
+              warning={this.isCritical('heartrate')}
+              bioSignalValue={this.state.heartrate.current}
+              color='red'
+              className="biosignal-HR" />
+
+            <NumericSignal
+              bioSignalType="spO2 %"
+              warning={this.isCritical('oxygen')}
+              bioSignalValue={this.state.oxygen.current}
+              color='purple'
+              className="biosignal-sO2"/>
+
+            <NumericSignal
+              bioSignalType="Sys / Dia mmHG"
+              warning={this.isCritical('diastole') || this.isCritical('systole')}
+              bioSignalValue={this.state.diastole.current} bioSignalValueAddOn={this.state.systole.current}
+              color='magenta'
+              className="biosignal-RR"/>
         </div>
 
         <div id="footer">connection status: {this.state.connection}.</div>

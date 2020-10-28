@@ -12,8 +12,9 @@ class GraphSignal extends Component {
 
   render() {
     return (
-      <div className={this.props.className + ' ' + (this.props.warning ? 'red' : '')}>
-      <div id="dygraph-container" ref="chart"></div>
+      <div className={this.props.color + ' ' + this.props.className + ' ' + (this.props.warning ? 'warning-border' : '')}>
+        <span>{this.props.bioSignalType}</span>
+        <div id="dygraph-container" ref="chart"></div>
       </div>
     );
   }
@@ -32,7 +33,7 @@ class GraphSignal extends Component {
 
   componentWillUnmount() {
     this.graph.destroy();
-}
+  }
 
   initialData() {
     let data = [];
@@ -58,20 +59,21 @@ class GraphSignal extends Component {
         this.tempData,
         {
           fillGraph: false,
-          title: this.props.bioSignalType,
           labels: ['Time', 'Biosignal'],
           drawGrid: false,
           valueRange: [
             this.props.valueRangeMin ,
             this.props.valueRangeMax ,
           ],
-          axisLineColor: "white",
-          color: "blue",
+          axisLineColor: this.props.color,
+          color: this.props.color,
           drawPoints: false,
-          drawAxis: false,
+          drawAxis: true,
           legend: "never",
         });
+
       } else {
+
         let dygraphContainerOffsetWidth = document.getElementById('dygraph-container').offsetWidth
         //display at most around 500 values depending on canvas width
         //ToDo: lost values, e.g. if last update at length 97 and next at 103 and offset =100, values 97,98,99 will be lost because array reduced to size 100

@@ -11,7 +11,7 @@ class NumericSignal extends React.Component {
 
   render() {
     return (
-      <div className={this.props.className + ' ' + (this.props.warning ? 'red' : '')}>
+      <div className={this.props.color + ' ' + this.props.className + ' ' + (this.props.warning ? 'warning-border' : '')}>
         <p className="bioSignalType"> {this.props.bioSignalType} </p>
         <p className="bioSignalValue"> {this.renderBioSignalValue()}</p>
       </div>

@@ -17,7 +17,11 @@ class App extends Component {
   render() {
     return (
       <div className={this.state.isDark ? 'dark-contrast main' : 'main'}>
-        <img className='contrast-icon' src={ContrastIcon} onClick={this.toggleContrast}/>
+        <div id="header">
+          <img className='contrast-icon' src={ContrastIcon} onClick={this.toggleContrast}/>
+          <span>OKTOPUS BIOSIGNAL MONITORING</span>
+        </div>
+
         <div>
           <MonitorView />
         </div>

@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 
 class NumericSignal extends React.Component {
-
-renderBioSignalValue() {
-  return (
-    this.props.bioSignalValueAddOn
-      ? this.props.bioSignalValue + " / " + this.props.bioSignalValueAddOn
-      : this.props.bioSignalValue
-  );
-}
+  renderBioSignalValue() {
+    return (
+      this.props.bioSignalValueAddOn
+        ? this.props.bioSignalValue + " / " + this.props.bioSignalValueAddOn
+        : this.props.bioSignalValue
+    );
+  }
 
   render() {
     return (
@@ -18,6 +17,6 @@ renderBioSignalValue() {
       </div>
     );
   }
-
 }
+
 export default NumericSignal;

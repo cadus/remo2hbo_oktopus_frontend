@@ -1,8 +1,8 @@
 import Dygraph from 'dygraphs';
 import React, { Component } from 'react';
 import { runInThisContext } from 'vm';
-class GraphSignal extends Component {
 
+class GraphSignal extends Component {
   constructor(props){
     super(props);
     this.indexPointer = 0;

@@ -21,10 +21,10 @@
     "postpackage": "electron-packager ./ --out=./release-builds"
   },
   "dependencies": {
-    "dygraphs": "^2.1.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-timeseries-charts": "^0.16.1"
+    "react-timeseries-charts": "^0.16.1",
+    "recharts": "^1.8.5"
   },
   "devDependencies": {
     "@babel/core": "^7.9.6",

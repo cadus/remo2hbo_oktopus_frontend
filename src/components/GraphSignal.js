@@ -1,90 +1,86 @@
-import Dygraph from 'dygraphs';
-import React, { Component } from 'react';
-import { runInThisContext } from 'vm';
+import { ResponsiveContainer, LineChart, Line, YAxis, XAxis } from "recharts";
+import React, { useState, useEffect, useRef } from 'react';
 
-class GraphSignal extends Component {
-  constructor(props){
-    super(props);
-    this.indexPointer = 0;
-    this.graph = null;
-    this.tempData = this.initialData();
+
+export default ({ valueRangeMin, valueRangeMax, color, className, bioSignalValue, bioSignalType, warning }) => {
+  const [data, setData] = useState(
+    [
+      {
+        "name": "Page A",
+        "pulse": 100,
+      },
+      {
+        "name": "Page A",
+        "pulse": 80,
+      },
+      {
+        "name": "Page A",
+        "pulse": 120,
+      },
+      {
+        "name": "Page A",
+        "pulse": 100,
+      },
+      {
+        "name": "Page A",
+        "pulse": 80,
+      },
+      {
+        "name": "Page A",
+        "pulse": 120,
+      },
+      {
+        "name": "Page A",
+        "pulse": 100,
+      },
+      {
+        "name": "Page A",
+        "pulse": 80,
+      },
+      {
+        "name": "Page A",
+        "pulse": 120,
+      },
+      {
+        "name": "Page A",
+        "pulse": 50,
+      },
+      {
+        "name": "Page A",
+        "pulse": 80,
+      },
+      {
+        "name": "Page A",
+        "pulse": 120,
+      },
+    ]
+  )
+
+  useEffect(() => {
+    saveSignal();
+  }, [bioSignalValue]);
+
+  function saveSignal() {
+    setData(prevState => {
+      let newArray = prevState.concat([{ "name": "Page A", "pulse": bioSignalValue }])
+      newArray.shift();
+      return newArray;
+    });
   }
 
-  render() {
-    return (
-      <div className={this.props.color + ' ' + this.props.className + ' ' + (this.props.warning ? 'warning-border' : '')}>
-        <span>{this.props.bioSignalType}</span>
-        <div id="dygraph-container" ref="chart"></div>
-      </div>
-    );
-  }
-
-  componentDidMount() {
-    this.saveSignal();
-    this.timerID = setInterval(
-      () => this.drawGraph(),
-      500
-    );
-  }
-
-  componentDidUpdate() {
-    this.saveSignal();
-  }
-
-  componentWillUnmount() {
-    this.graph.destroy();
-  }
-
-  initialData() {
-    let data = [];
-    for (let i = 0; i < 500; i++) {
-      let x = new Date();
-      let y = 0;
-      data.push([x,y]);
-    };
-    return data;
-  }
-
-  saveSignal() {
-    let x = new Date();
-    let y = Number(this.props.bioSignalValue);
-    this.tempData.push([x, y]);
-  }
-
-  drawGraph() {
-    if(this.graph == null) {
-
-      this.graph = new Dygraph(
-        this.refs.chart,
-        this.tempData,
-        {
-          fillGraph: false,
-          labels: ['Time', 'Biosignal'],
-          drawGrid: false,
-          valueRange: [
-            this.props.valueRangeMin ,
-            this.props.valueRangeMax ,
-          ],
-          axisLineColor: this.props.color,
-          color: this.props.color,
-          drawPoints: false,
-          drawAxis: true,
-          legend: "never",
-        });
-
-      } else {
-
-        let dygraphContainerOffsetWidth = document.getElementById('dygraph-container').offsetWidth
-        //display at most around 500 values depending on canvas width
-        //ToDo: lost values, e.g. if last update at length 97 and next at 103 and offset =100, values 97,98,99 will be lost because array reduced to size 100
-        if(this.tempData.length >= 500){
-          let valuesToBeRemoved = this.tempData.length-500;
-          //delete items from array to remain array.length at length of offsetWidth;
-          this.tempData.splice(0,valuesToBeRemoved);
-        }
-        this.graph.updateOptions( { 'file' : this.tempData} );
-      }
-    }
-  }
-
-  export default GraphSignal;
+  return (
+    <div className={color + ' ' + className + ' ' + (warning ? 'warning-border' : '')}>
+      <span>{bioSignalType}</span>
+      <span>{bioSignalValue}</span>
+      <ResponsiveContainer width='100%' height='100%'>
+        <LineChart
+          margin={{ top: 5, right: 20, left: -20, bottom: 5 }}
+          data={data}
+        >
+          <YAxis domain={[0, 150]} />
+          <Line isAnimationActive={false} type="monotone" dataKey="pulse" stroke={color} dot={false} />
+        </LineChart>
+      </ResponsiveContainer>
+    </div>
+  );
+}

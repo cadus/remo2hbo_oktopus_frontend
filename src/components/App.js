@@ -1,33 +1,25 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import MonitorView from './MonitorView.js';
 import SettingsIcon from '../images/settings.png';
 import ContrastIcon from '../images/contrastIcon.png';
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { isDark: true };
-    this.toggleContrast = this.toggleContrast.bind(this);
+export default () => {
+  const [isDark, setIsDark] = useState(true);
+
+  function toggleContrast() {
+    setIsDark(!isDark);
   }
 
-  toggleContrast() {
-    this.setState(prevState => ({ isDark: !prevState.isDark }));
-  }
-
-  render() {
-    return (
-      <div className={this.state.isDark ? 'dark-contrast main' : 'main'}>
-        <div id="header">
-          <img className='contrast-icon' src={ContrastIcon} onClick={this.toggleContrast}/>
-          <span>OKTOPUS BIOSIGNAL MONITORING</span>
-        </div>
-
-        <div>
-          <MonitorView />
-        </div>
+  return (
+    <div className={isDark ? 'dark-contrast main' : 'main'}>
+      <div id="header">
+        <img className='contrast-icon' src={ContrastIcon} onClick={() => toggleContrast()}/>
+        <span>OKTOPUS BIOSIGNAL MONITORING</span>
       </div>
-    )
-  }
-}
 
-export default App;
+      <div>
+        <MonitorView />
+      </div>
+    </div>
+  )
+}

@@ -1,22 +1,16 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 
-class NumericSignal extends React.Component {
-  renderBioSignalValue() {
+export default ({ color, className, bioSignalValue, bioSignalType, bioSignalValueAddOn, warning }) => {
+  function renderBioSignalValue() {
     return (
-      this.props.bioSignalValueAddOn
-        ? this.props.bioSignalValue + " / " + this.props.bioSignalValueAddOn
-        : this.props.bioSignalValue
+      bioSignalValueAddOn ? bioSignalValue + " / " + bioSignalValueAddOn : bioSignalValue
     );
   }
 
-  render() {
-    return (
-      <div className={this.props.color + ' ' + this.props.className + ' ' + (this.props.warning ? 'warning-border' : '')}>
-        <p className="bioSignalType"> {this.props.bioSignalType} </p>
-        <p className="bioSignalValue"> {this.renderBioSignalValue()}</p>
-      </div>
-    );
-  }
+  return (
+    <div className={color + ' ' + className + ' ' + (warning ? 'warning-border' : '')}>
+      <p className="bioSignalType"> {bioSignalType} </p>
+      <p className="bioSignalValue"> {renderBioSignalValue()}</p>
+    </div>
+  );
 }
-
-export default NumericSignal;

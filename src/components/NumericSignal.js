@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-export default ({ color, className, bioSignalValue, bioSignalType, bioSignalValueAddOn, warning }) => {
+export default ({ color, fontSize, className, bioSignalValue, bioSignalType, bioSignalValueAddOn, warning }) => {
   function renderBioSignalValue() {
     return (
       bioSignalValueAddOn ? bioSignalValue + " / " + bioSignalValueAddOn : bioSignalValue
@@ -8,9 +8,9 @@ export default ({ color, className, bioSignalValue, bioSignalType, bioSignalValu
   }
 
   return (
-    <div className={color + ' ' + className + ' ' + (warning ? 'warning-border' : '')}>
+    <div className={className + ' ' + (warning ? 'warning-border' : '')} style={{ color: color }}>
       <p className="bioSignalType"> {bioSignalType} </p>
-      <p className="bioSignalValue"> {renderBioSignalValue()}</p>
+      <p className="bioSignalValue" style={{ fontSize: fontSize }}> {renderBioSignalValue()}</p>
     </div>
   );
 }

@@ -52,7 +52,6 @@ http
       generateEventData(response, eventHistory, 'pulse');
       generateEventData(response, eventHistory, 'temperature');
       generateEventData(response, eventHistory, 'oxygen');
-      generateEventData(response, eventHistory, 'heartrate');
       generateEventData(response, eventHistory, 'systole');
       generateEventData(response, eventHistory, 'diastole');
 

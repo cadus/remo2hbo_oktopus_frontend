@@ -8,13 +8,12 @@ export default ({ color, className, bioSignalValue, bioSignalType, bioSignalValu
   const evtSource = new EventSource(EVENT_STREAM_ADDRESS);
   const [signals, setSignals] = useState(
     {
-      ekg: { min: 20, max: 80, current: 0 },
-      pulse: { min: 20, max: 80, current: 0 },
-      temperature: { min: 20, max: 80, current: 0 },
-      oxygen: { min: 20, max: 80, current: 0 },
-      heartrate: { min: 20, max: 80, current: 0 },
-      systole: { min: 20, max: 80, current: 0 },
-      diastole: { min: 20, max: 80, current: 0 },
+      ekg: { min: 10, max: 90, current: 0 },
+      pulse: { min: 10, max: 90, current: 0 },
+      temperature: { min: 10, max: 90, current: 0 },
+      oxygen: { min: 10, max: 90, current: 0 },
+      systole: { min: 10, max: 90, current: 0 },
+      diastole: { min: 30, max: 70, current: 0 },
     }
   );
   const [connection, setConnection] = useState('not connected');
@@ -35,7 +34,6 @@ export default ({ color, className, bioSignalValue, bioSignalType, bioSignalValu
     subscribeSSE("ekg");
     subscribeSSE("pulse");
     subscribeSSE("temperature");
-    subscribeSSE("heartrate");
     subscribeSSE("oxygen");
     subscribeSSE("diastole");
     subscribeSSE("systole");
@@ -43,7 +41,9 @@ export default ({ color, className, bioSignalValue, bioSignalType, bioSignalValu
 
   function subscribeSSE(vitalSign) {
     evtSource.addEventListener(vitalSign, function (e) {
-      setSignals(prevState => ({ ...prevState, [vitalSign]: {current: e.data} }));
+      setSignals(prevState => {
+        return { ...prevState, [vitalSign]: { ...prevState[vitalSign], current: e.data } }
+      });
     }, false);
   }
 
@@ -56,56 +56,90 @@ export default ({ color, className, bioSignalValue, bioSignalType, bioSignalValu
     <div className="app-container">
       <div id="grid-container">
           <GraphSignal
-            className="biosignal-EKG"
+            className="signal-ekg-1-graph"
             bioSignalType="EKG"
             warning={isCritical('ekg')}
             bioSignalValue={signals['ekg'].current}
             color='green'
-            valueRangeMin={-10} valueRangeMax={600} />
+            valueRangeMin={-10} valueRangeMax={200} />
 
           <GraphSignal
-            className="biosignal-HR-Graph"
-            bioSignalType="Pulse"
-            warning={isCritical('pulse')}
-            bioSignalValue={signals['pulse'].current}
-            color='lightblue'
-            valueRangeMin={0} valueRangeMax={800}/>
-
-          <GraphSignal
-            className="biosignal-placeholder-Graph"
+            className="signal-ekg-2-graph"
             bioSignalType="EKG"
             warning={isCritical('ekg')}
             bioSignalValue={signals['ekg'].current}
-            color='orange'
-            valueRangeMin={-10} valueRangeMax={600} />
+            color='green'
+            valueRangeMin={-10} valueRangeMax={200} />
 
-          <NumericSignal
-            bioSignalType="Temp °C"
-            warning={isCritical('temperature')}
-            bioSignalValue={signals['temperature'].current}
-            color='blue'
-            className="biosignal-Temp" />
+          <GraphSignal
+            className="signal-oxygen-graph"
+            bioSignalType="spO2 %"
+            warning={isCritical('oxygen')}
+            bioSignalValue={signals['oxygen'].current}
+            color='PaleTurquoise'
+            valueRangeMin={-10} valueRangeMax={300} />
 
-          <NumericSignal
-            bioSignalType="HR / min"
-            warning={isCritical('heartrate')}
-            bioSignalValue={signals['heartrate'].current}
+          <GraphSignal
+            className="signal-pulse-graph"
+            bioSignalType="HR/min"
+            warning={isCritical('pulse')}
+            bioSignalValue={signals['pulse'].current}
             color='red'
-            className="biosignal-HR" />
+            valueRangeMin={0} valueRangeMax={100}/>
+
+          <NumericSignal
+            bioSignalType="EKG"
+            warning={isCritical('ekg')}
+            bioSignalValue={signals['ekg'].current}
+            color='green' fontSize='5em'
+            className="signal-ekg-1" />
+
+          <NumericSignal
+            bioSignalType="HR/min"
+            warning={isCritical('pulse')}
+            bioSignalValue={signals['pulse'].current}
+            color='red' fontSize='4em'
+            className="signal-pulse" />
+
+          <NumericSignal
+            bioSignalType="Sys/Dia mmHG"
+            warning={isCritical('diastole') || isCritical('systole')}
+            bioSignalValue={signals['diastole'].current} bioSignalValueAddOn={signals['systole'].current}
+            color='red' fontSize='2em'
+            className="signal-rr"/>
 
           <NumericSignal
             bioSignalType="spO2 %"
             warning={isCritical('oxygen')}
             bioSignalValue={signals['oxygen'].current}
-            color='purple'
-            className="biosignal-sO2"/>
+            color='turquoise' fontSize='4em'
+            className="signal-oxygen"/>
 
           <NumericSignal
-            bioSignalType="Sys / Dia mmHG"
-            warning={isCritical('diastole') || isCritical('systole')}
-            bioSignalValue={signals['diastole'].current} bioSignalValueAddOn={signals['systole'].current}
-            color='magenta'
-            className="biosignal-RR"/>
+            bioSignalType="Temp °C"
+            warning={isCritical('temperature')}
+            bioSignalValue={signals['temperature'].current}
+            color='white' fontSize='4em'
+            className="signal-temp"/>
+
+          {/* PLACEHOLDERS */}
+          <NumericSignal
+            bioSignalType="Placeholder A"
+            bioSignalValue={123}
+            color='grey' fontSize='2em'
+            className="signal-placeholder-a"/>
+
+          <NumericSignal
+            bioSignalType="Placeholder B"
+            bioSignalValue={42}
+            color='grey' fontSize='2em'
+            className="signal-placeholder-b"/>
+
+          <NumericSignal
+            bioSignalType="Placeholder C"
+            bioSignalValue={33}
+            color='grey' fontSize='2em'
+            className="signal-placeholder-c"/>
       </div>
 
       <div id="footer">connection status: {connection}.</div>

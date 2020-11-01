@@ -1,6 +1,6 @@
 import { ResponsiveContainer, LineChart, Line, YAxis, CartesianGrid } from "recharts";
 import React, { useState, useEffect, useRef } from 'react';
-
+import Chart from "./chart";
 
 export default ({ valueRangeMin, valueRangeMax, color, className, bioSignalValue, bioSignalType, warning }) => {
   const [data, setData] = useState(initalValues);
@@ -29,22 +29,7 @@ export default ({ valueRangeMin, valueRangeMax, color, className, bioSignalValue
   return (
     <div className={className + ' ' + (warning ? 'warning-border' : '')} style={{ color: color }}>
       <span>{bioSignalType}</span>
-      <ResponsiveContainer width='100%' height='100%'>
-        <LineChart
-          margin={{ top: 5, right: 20, left: -20, bottom: 20 }}
-          data={data}
-        >
-          <YAxis domain={[valueRangeMin, valueRangeMax]} />
-          <CartesianGrid stroke="rgb(150, 150, 150, 0.2)" />
-          <Line
-            dataKey="value"
-            strokeWidth={3}
-            isAnimationActive={false}
-            type="monotone"
-            stroke={color}
-            dot={false} />
-        </LineChart>
-      </ResponsiveContainer>
+        <Chart />
     </div>
   );
 }

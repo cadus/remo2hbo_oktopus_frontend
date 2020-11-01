@@ -24,7 +24,8 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-timeseries-charts": "^0.16.1",
-    "recharts": "^1.8.5"
+    "recharts": "^1.8.5",
+    "webgl-plot": "^0.5.2"
   },
   "devDependencies": {
     "@babel/core": "^7.9.6",

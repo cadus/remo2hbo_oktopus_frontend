@@ -7417,6 +7417,11 @@ wbuf@^1.1.0, wbuf@^1.7.3:
   dependencies:
     minimalistic-assert "^1.0.0"
 
+webgl-plot@^0.5.2:
+  version "0.5.2"
+  resolved "https://registry.yarnpkg.com/webgl-plot/-/webgl-plot-0.5.2.tgz#3b98795d2d2e951a8d0beea4769985d3401fd1ea"
+  integrity sha512-SgauCQV+I0/E+z2pAffNdXReZ7yUZes4VxajmXSFEyGMtVZcTRPkaDHAhQK67PWoD78a9GwOJCOlD3R3en2kSg==
+
 webpack-cli@^3.3.11:
   version "3.3.11"
   resolved "https://registry.yarnpkg.com/webpack-cli/-/webpack-cli-3.3.11.tgz#3bf21889bf597b5d82c38f215135a411edfdc631"

@@ -13,8 +13,12 @@ export default function Chart() {
 
   useEffect(() => {
     if (canvasMain.current) {
+      canvasMain.current.width = canvasMain.current.clientWidth;
+      canvasMain.current.height = canvasMain.current.clientHeight;
+
+
       webglp = new WebGlPlot(canvasMain.current);
-      const numX = 100;
+      const numX = 200;
 
       line = new WebglLine(new ColorRGBA(1, 0, 0, 1), numX);
       webglp.addLine(line);

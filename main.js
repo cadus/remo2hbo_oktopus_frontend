@@ -13,6 +13,31 @@ if (
 	isDev = true
 }
 
+const signals = ['ekg', 'pulse', 'oxygen']
+setInterval(() => {
+	const randomSignal = signals[Math.floor(Math.random()*signals.length)];
+
+	mainWindow.webContents.send(randomSignal, Math.random());
+}, 10);
+
+process.stdin.on('readable', () => {
+	// let chunk;
+	// while (null !== (chunk = process.stdin.read())) {
+	// 	console.log(`Chunk: ${chunk}`);
+	// 	mainWindow.webContents.send('main', chunk);
+	// }
+
+	var readline = require('readline');
+	var rl = readline.createInterface({
+	  input: process.stdin,
+	});
+
+	rl.on('line', function(line){
+
+		mainWindow.webContents.send('main', line);
+	})
+});
+
 function createMainWindow() {
 	mainWindow = new BrowserWindow({
 		width: 1100,
@@ -62,16 +87,6 @@ function createMainWindow() {
 	})
 
 	mainWindow.on('closed', () => (mainWindow = null))
-
-	// DATA STREAM
-	var readline = require('readline');
-	var rl = readline.createInterface({
-	  input: process.stdin
-	});
-
-	rl.on('line', function(line){
-	   mainWindow.webContents.send('main', line);
-	})
 }
 
 app.on('ready', createMainWindow)

@@ -57,34 +57,34 @@ export default ({ color, className, bioSignalValue, bioSignalType, bioSignalValu
       <div id="grid-container">
           <GraphSignal
             className="signal-ekg-1-graph"
-            bioSignalType="EKG"
+            bioSignalType="ekg"
             warning={isCritical('ekg')}
             bioSignalValue={signals['ekg'].current}
-            color='green'
+            color={[255, 0, 255]}
             valueRangeMin={-10} valueRangeMax={200} />
 
           <GraphSignal
             className="signal-ekg-2-graph"
-            bioSignalType="EKG"
+            bioSignalType="ekg"
             warning={isCritical('ekg')}
             bioSignalValue={signals['ekg'].current}
-            color='green'
+            color={[255, 255, 0]}
             valueRangeMin={-10} valueRangeMax={200} />
 
           <GraphSignal
             className="signal-oxygen-graph"
-            bioSignalType="spO2 %"
+            bioSignalType="oxygen"
             warning={isCritical('oxygen')}
             bioSignalValue={signals['oxygen'].current}
-            color='PaleTurquoise'
+            color={[255, 255, 255]}
             valueRangeMin={-10} valueRangeMax={300} />
 
           <GraphSignal
             className="signal-pulse-graph"
-            bioSignalType="HR/min"
+            bioSignalType="pulse"
             warning={isCritical('pulse')}
             bioSignalValue={signals['pulse'].current}
-            color='red'
+            color={[0, 255, 255]}
             valueRangeMin={0} valueRangeMax={100}/>
 
           <NumericSignal

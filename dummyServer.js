@@ -39,7 +39,7 @@ http
     setInterval(() => {
       if (!response.finished) {
         const eventString =
-          'event: ' + bioSignal + '\ndata: ' + Math.round(Math.random()*100) + '\n\n';
+          'event: ' + bioSignal + '\ndata: ' + Math.random() + '\n\n';
         response.write(eventString);
         eventHistory.push(eventString);
       }

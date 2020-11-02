@@ -20,23 +20,23 @@ setInterval(() => {
 	mainWindow.webContents.send(randomSignal, Math.random());
 }, 10);
 
-process.stdin.on('readable', () => {
-	// let chunk;
-	// while (null !== (chunk = process.stdin.read())) {
-	// 	console.log(`Chunk: ${chunk}`);
-	// 	mainWindow.webContents.send('main', chunk);
-	// }
-
-	var readline = require('readline');
-	var rl = readline.createInterface({
-	  input: process.stdin,
-	});
-
-	rl.on('line', function(line){
-
-		mainWindow.webContents.send('main', line);
-	})
-});
+// process.stdin.on('readable', () => {
+// 	// let chunk;
+// 	// while (null !== (chunk = process.stdin.read())) {
+// 	// 	console.log(`Chunk: ${chunk}`);
+// 	// 	mainWindow.webContents.send('main', chunk);
+// 	// }
+//
+// 	var readline = require('readline');
+// 	var rl = readline.createInterface({
+// 	  input: process.stdin,
+// 	});
+//
+// 	rl.on('line', function(line){
+//
+// 		mainWindow.webContents.send('main', line);
+// 	})
+// });
 
 function createMainWindow() {
 	mainWindow = new BrowserWindow({

@@ -2,50 +2,32 @@ import React, { useState, useEffect } from 'react';
 import NumericSignal from '../components/NumericSignal'
 import GraphSignal from '../components/GraphSignal';
 import contrastIcon from '../images/contrastIcon.png';
-const EVENT_STREAM_ADDRESS = "http://localhost:5000/events"; //    http://141.45.146.235:8200
 
 export default ({ color, className, bioSignalValue, bioSignalType, bioSignalValueAddOn, warning }) => {
-  const evtSource = new EventSource(EVENT_STREAM_ADDRESS);
   const [signals, setSignals] = useState(
     {
-      ekg: { min: 10, max: 90, current: 0 },
-      pulse: { min: 10, max: 90, current: 0 },
-      temperature: { min: 10, max: 90, current: 0 },
-      oxygen: { min: 10, max: 90, current: 0 },
-      systole: { min: 10, max: 90, current: 0 },
-      diastole: { min: 30, max: 70, current: 0 },
+      ekg: { min: 0.10, max: 0.90, current: 0 },
+      pulse: { min: 0.10, max: 0.90, current: 0 },
+      temperature: { min: 0.10, max: 0.90, current: 0 },
+      oxygen: { min: 0.10, max: 0.90, current: 0 },
+      diastole: { min: 0.30, max: 0.70, current: 0 },
+      systole: { min: 0.10, max: 0.90, current: 0 },
     }
   );
   const [connection, setConnection] = useState('not connected');
 
   useEffect(() => {
-    evtSource.onerror = function (e) {
-      setConnection("error");
-    };
+    /** Add IPC event listener */
+    const { ipcRenderer } = require('electron');
 
-    evtSource.onopen = function (e) {
-      setConnection("connected");
-    };
-
-    evtSource.close = function (e) {
-      setConnection("not connected");
-    };
-
-    subscribeSSE("ekg");
-    subscribeSSE("pulse");
-    subscribeSSE("temperature");
-    subscribeSSE("oxygen");
-    subscribeSSE("diastole");
-    subscribeSSE("systole");
-  }, [])
-
-  function subscribeSSE(vitalSign) {
-    evtSource.addEventListener(vitalSign, function (e) {
-      setSignals(prevState => {
-        return { ...prevState, [vitalSign]: { ...prevState[vitalSign], current: e.data } }
+    ['ekg', 'pulse', 'oxygen'].forEach((signalName) => {
+      ipcRenderer.on(signalName, (event, data) => {
+        setSignals(prevState => {
+          return { ...prevState, [signalName]: { ...prevState[signalName], current: data } }
+        });
       });
-    }, false);
-  }
+    });
+  }, [])
 
   function isCritical(vitalSign) {
     return signals[vitalSign].current < signals[vitalSign].min ||

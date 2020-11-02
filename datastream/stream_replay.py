@@ -3,6 +3,14 @@ import json
 import time
 import sys
 from datetime import datetime
+import argparse
+import struct
+
+parser = argparse.ArgumentParser(description='LifeSensor filestream replay')
+parser.add_argument('-b', help="replay binary format",
+                    action="count", default=0)
+parser.add_argument('file', nargs='?', help='file to replay, if omitted use stdin', default=sys.stdin)
+args = parser.parse_args()
 
 while True:
 	last = 0
@@ -10,7 +18,31 @@ while True:
 	timeSkewNeg = 0
 	timeSkewPos = 0
 	lines = 0
-	for line in fileinput.input():
+	if args.b:
+		f = open(args.file,"rb")
+		while True:
+			b_curr = f.read(4)
+			if (b_curr == b''): break
+			curr, = struct.unpack("f", b_curr)
+			b_length = f.read(2)
+			length, = struct.unpack("H", b_length)
+			b_payload = f.read(length)
+			preEmit = datetime.now().timestamp()
+			wait = curr - last - (preEmit-postEmit)
+			if wait > 0:
+					time.sleep(wait)
+			sys.stdout.buffer.write(b_length + b_payload)
+			print(length, b_payload,file=sys.stderr)
+			postEmit = datetime.now().timestamp()
+			timeSkew = postEmit-preEmit-wait
+			if timeSkew > 0:
+				timeSkewPos += timeSkew
+			else:
+				timeSkewNeg += timeSkew
+			lines += 1
+			last = curr
+	else:
+		for line in fileinput.input(args.file):
 			obj = json.loads(line)
 			curr = obj['_replay']
 			del obj['_replay']

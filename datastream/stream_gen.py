@@ -4,6 +4,7 @@ import argparse
 import sys
 import random
 import json
+import struct
 
 parser = argparse.ArgumentParser(description='LifeSensor filestream generator')
 parser.add_argument('-i', metavar='<path>', nargs='+', required=True, help='data to import')
@@ -17,6 +18,7 @@ parser.add_argument('-d', metavar='<timevariation>', type=float,
                     default=0.0, help='maximum delay factor relative to sampling rate of input (=0:none, >0:delayed, >1:unordered)')
 parser.add_argument('-r', metavar='<path>/<signal>:<name>',
                     nargs='*', default=[], help='rename <signal> to <name>')
+parser.add_argument('-b', help="generate binary output", action="count", default=0)
 args = parser.parse_args()
 
 print(f"Arguments: {args}",file=sys.stderr)
@@ -54,4 +56,10 @@ times.sort()
 for time in times:
     for sig, vals in timing[time].items():
         for val in vals:
-            print(json.dumps(val))
+            if args.b:
+                payload = struct.pack("Qf", val["timestamp"], val["value"]) + val["type"].encode('utf-8') + b'\0\n'
+                length  = struct.pack("H", len(payload))
+                replay  = struct.pack("f", val["_replay"])
+                sys.stdout.buffer.write(replay+length+payload)
+            else:
+                print(json.dumps(val))

@@ -5,6 +5,7 @@ import ContrastIcon from '../images/contrastIcon.png';
 
 export default () => {
   const [isDark, setIsDark] = useState(true);
+  const { ipcRenderer } = require('electron');
 
   function toggleContrast() {
     setIsDark(!isDark);

@@ -62,6 +62,16 @@ function createMainWindow() {
 	})
 
 	mainWindow.on('closed', () => (mainWindow = null))
+
+	// DATA STREAM
+	var readline = require('readline');
+	var rl = readline.createInterface({
+	  input: process.stdin
+	});
+
+	rl.on('line', function(line){
+	   mainWindow.webContents.send('main', line);
+	})
 }
 
 app.on('ready', createMainWindow)

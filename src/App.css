@@ -54,7 +54,7 @@ body {
   padding: 1vh;
   display: grid;
   grid-template-columns: 66% 14% 18%;
-  grid-template-rows: repeat(13, 5vh);
+  grid-template-rows: repeat(14, 5vh);
   grid-gap: 1.5vmin;
 }
 
@@ -62,71 +62,67 @@ body {
   padding: 1vmin;
 }
 
-.signal-ekg-1-graph {
+.signal-ecg-0-graph {
   grid-column: 1 / 2;
-  grid-row: 1 / 3;
+  grid-row: 1 / 4;
 }
 
-.signal-ekg-2-graph {
+.signal-ecg-1-graph {
   grid-column: 1 / 2;
-  grid-row: 3 / 5;
+  grid-row: 4 / 7;
 }
 
 .signal-pulse-graph {
   grid-column: 1 / 2;
-  grid-row: 5 / 9;
+  grid-row: 7 / 10;
 }
 
-.signal-oxygen-graph {
+.signal-spo2-graph {
   grid-column: 1 / 2;
-  grid-row: 9 / 12;
+  grid-row: 10 / 13;
 }
 
-.signal-ekg-1 {
+.signal-ecg-0 {
   grid-column: 2 / 4;
-  grid-row: 1 / 5;
+  grid-row: 1 / 4;
+}
+
+.signal-ecg-1 {
+  grid-column: 2 / 4;
+  grid-row: 4 / 7;
 }
 
 .signal-pulse {
   grid-column: 2 / 3;
-  grid-row: 5 / 9;
+  grid-row: 7 / 10;
 }
 
-.signal-rr {
+.signal-bp {
   grid-column: 3 / 4;
-  grid-row: 5 / 9;
+  grid-row: 7 / 10;
 }
 
-.signal-oxygen {
+.signal-spo2 {
   grid-column: 2 / 3;
-  grid-row: 9 / 12;
+  grid-row: 10 / 13;
 }
 
 .signal-temp {
   grid-column: 3 / 4;
-  grid-row: 9 / 12;
+  grid-row: 10 / 13;
 }
 
-.signal-placeholder-a {
+.signal-time {
   grid-column: 1 / 2;
-  grid-row: 12 / 13;
+  grid-row: 13 / 14;
 }
 
-.signal-placeholder-b {
-  grid-column: 2 / 3;
-  grid-row: 12 / 13;
-}
-
-.signal-placeholder-c {
-  grid-column: 3 / 4;
-  grid-row: 12 / 13;
-}
-
-.bioSignalType {
+.numeric-signal-label {
   text-align: start;
+  margin: 0;
 }
 
-.bioSignalValue {
+.numeric-signal-value {
   text-align: center;
   font-weight: bold;
   font-size: 4em;

@@ -9,6 +9,8 @@ import struct
 parser = argparse.ArgumentParser(description='LifeSensor filestream replay')
 parser.add_argument('-b', help="replay binary format",
                     action="count", default=0)
+parser.add_argument('-d', help="debug output",
+                    action="count", default=0)
 parser.add_argument('file', nargs='?', help='file to replay, if omitted use stdin', default=sys.stdin)
 args = parser.parse_args()
 
@@ -32,7 +34,10 @@ while True:
 			if wait > 0:
 					time.sleep(wait)
 			sys.stdout.buffer.write(b_length + b_payload)
-			print(length, b_payload,file=sys.stderr)
+			if args.d:
+				timestamp, value, type = struct.unpack("Qf"+ str(length-12) + "s", b_payload)
+				print(length, timestamp, value, type, file=sys.stderr)
+			sys.stdout.flush()
 			postEmit = datetime.now().timestamp()
 			timeSkew = postEmit-preEmit-wait
 			if timeSkew > 0:
@@ -51,6 +56,8 @@ while True:
 			if wait > 0:
 					time.sleep(wait)
 			print(json.dumps(obj))
+			if args.d:
+				print(obj,file=sys.stderr)
 			postEmit = datetime.now().timestamp()
 			timeSkew = postEmit-preEmit-wait
 			if timeSkew > 0:

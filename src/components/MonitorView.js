@@ -2,129 +2,74 @@ import React, { useState, useEffect } from 'react';
 import NumericSignal from '../components/NumericSignal'
 import GraphSignal from '../components/GraphSignal';
 import contrastIcon from '../images/contrastIcon.png';
+const { ipcRenderer } = require('electron');
 
 export default ({ color, className, bioSignalValue, bioSignalType, bioSignalValueAddOn, warning }) => {
-  const [signals, setSignals] = useState(
-    {
-      ekg: { min: 0.10, max: 0.90, current: 0 },
-      pulse: { min: 0.10, max: 0.90, current: 0 },
-      temperature: { min: 0.10, max: 0.90, current: 0 },
-      oxygen: { min: 0.10, max: 0.90, current: 0 },
-      diastole: { min: 0.30, max: 0.70, current: 0 },
-      systole: { min: 0.10, max: 0.90, current: 0 },
-    }
-  );
-  const [connection, setConnection] = useState('not connected');
+  const initialValues = {
+    ECG0:     { current: 0,  frequency: 500, range: [3, 5] },
+    ECG1:     { current: 0,  frequency: 500, range: [0, 2] },
+    ECG2:     { current: 0,  frequency: 500, range: [0, 1] },
+    pulse:    { current: 0,  frequency: 50,  range: [-2, 2] },
+    BP:       { current: 0,  frequency: 5,   range: [0, 0.1] },
+    spo2:     { current: 0,  frequency: 50,  range:  [95, 100] },
+    temp:     { current: 37, frequency: 1000, range: [0, 1] },
+    diastole: { current: 0,  frequency: 1000, range: [0, 1] },
+    systole:  { current: 0,  frequency: 1000, range: [0, 1] },
+  }
+  const [signals, setSignals] = useState(initialValues);
 
   useEffect(() => {
-    /** Add IPC event listener */
-    const { ipcRenderer } = require('electron');
-
-    ['ekg', 'pulse', 'oxygen'].forEach((signalName) => {
+    Object.keys(initialValues).forEach((signalName) => {
       ipcRenderer.on(signalName, (event, data) => {
         setSignals(prevState => {
-          return { ...prevState, [signalName]: { ...prevState[signalName], current: data } }
+          return { ...prevState, [signalName]: { ...prevState[signalName], current: data.toFixed(2) } }
         });
       });
     });
   }, [])
 
-  function isCritical(vitalSign) {
-    return signals[vitalSign].current < signals[vitalSign].min ||
-      signals[vitalSign].current > signals[vitalSign].max;
-  }
+  // function isCritical(vitalSign) {
+  //   return signals[vitalSign].current < signals[vitalSign].min ||
+  //     signals[vitalSign].current > signals[vitalSign].max;
+  // }
 
   return (
     <div className="app-container">
       <div id="grid-container">
-          <GraphSignal
-            className="signal-ekg-1-graph"
-            bioSignalType="ekg"
-            warning={isCritical('ekg')}
-            bioSignalValue={signals['ekg'].current}
-            color={[255, 0, 255]}
-            valueRangeMin={-10} valueRangeMax={200} />
+          <GraphSignal className="signal-ecg-0-graph" color={[0, 255, 0]}
+                       data={signals['ECG0']} label="ECG0" />
 
-          <GraphSignal
-            className="signal-ekg-2-graph"
-            bioSignalType="ekg"
-            warning={isCritical('ekg')}
-            bioSignalValue={signals['ekg'].current}
-            color={[255, 255, 0]}
-            valueRangeMin={-10} valueRangeMax={200} />
+          <GraphSignal className="signal-ecg-1-graph" color={[0, 255, 0]}
+                       data={signals['ECG1']} label="ECG1" />
 
-          <GraphSignal
-            className="signal-oxygen-graph"
-            bioSignalType="oxygen"
-            warning={isCritical('oxygen')}
-            bioSignalValue={signals['oxygen'].current}
-            color={[255, 255, 255]}
-            valueRangeMin={-10} valueRangeMax={300} />
+          <GraphSignal className="signal-spo2-graph" color={[255, 0, 255]}
+                       data={signals['spo2']} label="spO2" />
 
-          <GraphSignal
-            className="signal-pulse-graph"
-            bioSignalType="pulse"
-            warning={isCritical('pulse')}
-            bioSignalValue={signals['pulse'].current}
-            color={[0, 255, 255]}
-            valueRangeMin={0} valueRangeMax={100}/>
+          <GraphSignal className="signal-pulse-graph" color={[255, 0, 0]}
+                       data={signals['pulse']} label="pulse" />
 
-          <NumericSignal
-            bioSignalType="EKG"
-            warning={isCritical('ekg')}
-            bioSignalValue={signals['ekg'].current}
-            color='green' fontSize='5em'
-            className="signal-ekg-1" />
 
-          <NumericSignal
-            bioSignalType="HR/min"
-            warning={isCritical('pulse')}
-            bioSignalValue={signals['pulse'].current}
-            color='red' fontSize='4em'
-            className="signal-pulse" />
+          <NumericSignal className="signal-ecg-0" color='green' fontSize='6em'
+                         data={signals['ECG0']} label="ECG0" />
 
-          <NumericSignal
-            bioSignalType="Sys/Dia mmHG"
-            warning={isCritical('diastole') || isCritical('systole')}
-            bioSignalValue={signals['diastole'].current} bioSignalValueAddOn={signals['systole'].current}
-            color='red' fontSize='2em'
-            className="signal-rr"/>
+          <NumericSignal className="signal-ecg-1" color='green' fontSize='6em'
+                         data={signals['ECG1']} label="ECG1" />
 
-          <NumericSignal
-            bioSignalType="spO2 %"
-            warning={isCritical('oxygen')}
-            bioSignalValue={signals['oxygen'].current}
-            color='turquoise' fontSize='4em'
-            className="signal-oxygen"/>
+          <NumericSignal className="signal-pulse" color='red' fontSize='4em'
+                         data={signals['pulse']} label="pulse" />
 
-          <NumericSignal
-            bioSignalType="Temp °C"
-            warning={isCritical('temperature')}
-            bioSignalValue={signals['temperature'].current}
-            color='white' fontSize='4em'
-            className="signal-temp"/>
+          <NumericSignal className="signal-bp" color='red' fontSize='3em'
+                         data={signals['BP']} label="BP" />
 
-          {/* PLACEHOLDERS */}
-          <NumericSignal
-            bioSignalType="Placeholder A"
-            bioSignalValue={123}
-            color='grey' fontSize='2em'
-            className="signal-placeholder-a"/>
+          <NumericSignal className="signal-spo2" color='fuchsia' fontSize='4em'
+                         data={signals['spo2']} label="spO2" />
 
-          <NumericSignal
-            bioSignalType="Placeholder B"
-            bioSignalValue={42}
-            color='grey' fontSize='2em'
-            className="signal-placeholder-b"/>
+          <NumericSignal className="signal-temp" color='white' fontSize='4em'
+                         data={signals['temp']} label="Temp" />
 
-          <NumericSignal
-            bioSignalType="Placeholder C"
-            bioSignalValue={33}
-            color='grey' fontSize='2em'
-            className="signal-placeholder-c"/>
+          <NumericSignal className="signal-time" color='grey' fontSize='2em'
+                         data={{ current: new Date().toLocaleString() }} label="Time" />
       </div>
-
-      <div id="footer">connection status: {connection}.</div>
     </div>
   );
 }

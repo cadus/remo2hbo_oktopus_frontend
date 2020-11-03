@@ -13,32 +13,29 @@ if (
 	isDev = true
 }
 
-const signals = ['ekg', 'pulse', 'oxygen']
-setInterval(() => {
-	const randomSignal = signals[Math.floor(Math.random()*signals.length)];
-
-	mainWindow.webContents.send(randomSignal, Math.random());
-}, 10);
-
-// process.stdin.on('readable', () => {
-// 	// let chunk;
-// 	// while (null !== (chunk = process.stdin.read())) {
-// 	// 	console.log(`Chunk: ${chunk}`);
-// 	// 	mainWindow.webContents.send('main', chunk);
-// 	// }
-//
-// 	var readline = require('readline');
-// 	var rl = readline.createInterface({
-// 	  input: process.stdin,
-// 	});
-//
-// 	rl.on('line', function(line){
-//
-// 		mainWindow.webContents.send('main', line);
-// 	})
-// });
-
 function createMainWindow() {
+	console.log("start");
+	console.log(process.stdin.isPaused());
+
+	currLength = undefined;
+	process.stdin.on('readable', () => {
+    while (true) {
+      currLength = process.stdin.read(2)?.readInt16LE();
+      if (currLength === undefined) return;
+      const buf = process.stdin.read(currLength);
+      if (buf === null) return;
+      const timestamp = Number(buf.readBigUInt64LE(0));
+      const value = buf.readFloatLE(8);
+      const string = buf.toString('utf-8', 12, currLength - 2);
+      currLength = undefined
+
+			console.log(string, value)
+			mainWindow.webContents.send(string, value);
+    }
+	});
+	process.stdin.resume();
+	// ---------------- //
+
 	mainWindow = new BrowserWindow({
 		width: 1100,
 		height: 800,

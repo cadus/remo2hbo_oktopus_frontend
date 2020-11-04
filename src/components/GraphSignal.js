@@ -7,12 +7,13 @@ export default function Chart({ height, color, className, data, label, warning }
   const [webglp, setWebglp] = useState(null);
   const [lineObj, setLineObj] = useState(null);
 
+  const numPoints = 5000;
+
   useEffect(() => {
     if (canvasMain.current) {
       canvasMain.current.width = canvasMain.current.clientWidth;
       canvasMain.current.height = canvasMain.current.clientHeight;
 
-      const numPoints = data.frequency;
       const w = new WebGlPlot(canvasMain.current);
       const l = new WebglLine(new ColorRGBA(color[0], color[1], color[2]), numPoints);
       l.lineSpaceX(-1, 2 / (numPoints - 2));
@@ -29,10 +30,13 @@ export default function Chart({ height, color, className, data, label, warning }
 
   function addPoint(line, yData) {
     if (line) {
-      line.setY(line.numPoints - 1, normalized(yData.current));
-      for (let i = 0; i < line.numPoints; i++) {
-        line.setY(i, line.getY(i + 1));
+      let xPos = data.current[1] % numPoints;
+      let yPos = normalized(yData.current[0]);
+
+      for (let i = xPos; i < xPos + 100; i++) {
+        line.setY(i, yPos);
       }
+      line.setY(xPos, yPos);
       webglp.update();
     }
   }

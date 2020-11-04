@@ -6,15 +6,13 @@ const { ipcRenderer } = require('electron');
 
 export default ({ color, className, bioSignalValue, bioSignalType, bioSignalValueAddOn, warning }) => {
   const initialValues = {
-    ECG0:     { current: 0,  frequency: 500, range: [3, 5] },
-    ECG1:     { current: 0,  frequency: 500, range: [0, 2] },
-    ECG2:     { current: 0,  frequency: 500, range: [0, 1] },
-    pulse:    { current: 0,  frequency: 50,  range: [-2, 2] },
-    BP:       { current: 0,  frequency: 5,   range: [0, 0.1] },
-    spo2:     { current: 0,  frequency: 50,  range:  [95, 100] },
-    temp:     { current: 37, frequency: 1000, range: [0, 1] },
-    diastole: { current: 0,  frequency: 1000, range: [0, 1] },
-    systole:  { current: 0,  frequency: 1000, range: [0, 1] },
+    ECG0:     { current: [0, 0],  range: [3, 5] },
+    ECG1:     { current: [0, 0],  range: [0, 2] },
+    ECG2:     { current: [0, 0],  range: [0, 1] },
+    pulse:    { current: [0, 0],  range: [-2, 2] },
+    BP:       { current: [0, 0],  range: [0, 0.1] },
+    spo2:     { current: [0, 0],  range: [95, 100] },
+    temp:     { current: [37, 0], range: [0, 1] },
   }
   const [signals, setSignals] = useState(initialValues);
 
@@ -22,7 +20,11 @@ export default ({ color, className, bioSignalValue, bioSignalType, bioSignalValu
     Object.keys(initialValues).forEach((signalName) => {
       ipcRenderer.on(signalName, (event, data) => {
         setSignals(prevState => {
-          return { ...prevState, [signalName]: { ...prevState[signalName], current: data.toFixed(2) } }
+          return {
+            ...prevState, [signalName]: {
+              ...prevState[signalName], current: [data[0], data[1]]
+            }
+          }
         });
       });
     });
@@ -49,10 +51,10 @@ export default ({ color, className, bioSignalValue, bioSignalType, bioSignalValu
                        data={signals['pulse']} label="pulse" />
 
 
-          <NumericSignal className="signal-ecg-0" color='green' fontSize='6em'
+          <NumericSignal className="signal-ecg-0" color='green' fontSize='5em'
                          data={signals['ECG0']} label="ECG0" />
 
-          <NumericSignal className="signal-ecg-1" color='green' fontSize='6em'
+          <NumericSignal className="signal-ecg-1" color='green' fontSize='5em'
                          data={signals['ECG1']} label="ECG1" />
 
           <NumericSignal className="signal-pulse" color='red' fontSize='4em'
@@ -67,8 +69,10 @@ export default ({ color, className, bioSignalValue, bioSignalType, bioSignalValu
           <NumericSignal className="signal-temp" color='white' fontSize='4em'
                          data={signals['temp']} label="Temp" />
 
-          <NumericSignal className="signal-time" color='grey' fontSize='2em'
-                         data={{ current: new Date().toLocaleString() }} label="Time" />
+
+          <div className='signal-time' style={{ color: 'grey' }}>
+            <p className="numeric-signal-value" style={{ fontSize: '1.5em' }}>Time: {new Date().toLocaleString()}</p>
+          </div>
       </div>
     </div>
   );

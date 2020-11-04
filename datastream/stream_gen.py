@@ -1,5 +1,7 @@
 import wfdb
 import numpy as np
+import scipy
+import scipy.signal
 import argparse
 import sys
 import random
@@ -16,9 +18,12 @@ parser.add_argument('-m', metavar='<seconds>',
                     type=float, help='stop after this amount of time')
 parser.add_argument('-d', metavar='<timevariation>', type=float,
                     default=0.0, help='maximum delay factor relative to sampling rate of input (=0:none, >0:delayed, >1:unordered)')
+parser.add_argument('-rs', metavar='<path>/<signal>:<samples per sec>', nargs='*',
+                    default=[], help='resample input data')
 parser.add_argument('-r', metavar='<path>/<signal>:<name>',
                     nargs='*', default=[], help='rename <signal> to <name>')
 parser.add_argument('-b', help="generate binary output", action="count", default=0)
+
 args = parser.parse_args()
 
 print(f"Arguments: {args}",file=sys.stderr)
@@ -29,22 +34,31 @@ for r in args.r:
     old, new = r.split(':')
     rename[old] = new
 
+resample = {}
+for rs in args.rs:
+    name,rate = rs.split(':')
+    resample[name] = float(rate)
+
 for path in args.i:
     print(f"opening file '{path}'",file=sys.stderr)
     signals, fields = wfdb.rdsamp(path)
     print(f"Meta data of '{path}': {fields}",file=sys.stderr)
-    rate = fields['fs'] * args.t
     print("Generating data",file=sys.stderr)
     for index_sig in range(len(fields['sig_name'])):
         name = fields['sig_name'][index_sig]
-        if f"{path}/{name}" in args.s:
-            for index_beat in range(signals[:, index_sig].shape[0]):
-                time = index_beat/rate
+        fullname = f"{path}/{name}"
+        if fullname in args.s:
+            rate = fields['fs'] if fullname not in resample else resample[fullname]
+            fulltime = args.m if args.m else signals[:, index_sig].shape[0]/rate
+            samples = signals[0:int(rate*fulltime), index_sig] if fullname not in resample else scipy.signal.resample(
+                signals[0:int(fields['fs']*fulltime), index_sig], int(rate * fulltime))
+            for index_beat in range(samples.shape[0]):
+                time = (index_beat/rate) * args.t
                 if args.m and  time > args.m:
                     break
                 time_ms = int(time*1000)
                 delay = random.random() * args.d / rate
-                value = signals[index_beat, index_sig]
+                value = samples[index_beat]
                 name = rename.get(f"{path}/{name}", name)
                 event = {"type":name, "timestamp":time_ms, "value":value, "no":index_beat, "_replay":time+delay}
                 timing.setdefault(time + delay, {}).setdefault(name,[]).append(event)

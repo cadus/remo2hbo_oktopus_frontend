@@ -1,85 +1,53 @@
-import Dygraph from 'dygraphs';
-import React, { Component } from 'react';
-import { runInThisContext } from 'vm';
-class GraphSignal extends Component {
+import React, { useEffect, useRef, useState } from "react";
+import WebGlPlot, { WebglLine, ColorRGBA } from "webgl-plot";
 
-    constructor(props){
-        super(props);
-        this.indexPointer = 0;
-        this.graph = null;
-        this.tempData = this.initialData();
+export default function Chart({ height, color, className, data, label, warning }) {
+  const canvasMain = useRef(null);
+
+  const [webglp, setWebglp] = useState(null);
+  const [lineObj, setLineObj] = useState(null);
+
+  useEffect(() => {
+    if (canvasMain.current) {
+      canvasMain.current.width = canvasMain.current.clientWidth;
+      canvasMain.current.height = canvasMain.current.clientHeight;
+
+      const numPoints = data.frequency;
+      const w = new WebGlPlot(canvasMain.current);
+      const l = new WebglLine(new ColorRGBA(color[0], color[1], color[2]), numPoints);
+      l.lineSpaceX(-1, 2 / (numPoints - 2));
+      w.addLine(l);
+
+      setLineObj(l);
+      setWebglp(w);
     }
+  }, []);
 
-    render() {
-        return <div id="dygraph-container" ref="chart"></div>;
-    }
+  useEffect(() => {
+    addPoint(lineObj, data);
+  }, [data]);
 
-    componentDidMount() {
-        //console.log("DidMount ", this.props.bioSignalValue);
-        this.saveSignal();
-        this.timerID = setInterval(
-            () => this.drawGraph(),
-            500
-        );
+  function addPoint(line, yData) {
+    if (line) {
+      line.setY(line.numPoints - 1, normalized(yData.current));
+      for (let i = 0; i < line.numPoints; i++) {
+        line.setY(i, line.getY(i + 1));
       }
-
-    componentDidUpdate() {
-        //console.log("DidUpdate ", this.props.bioSignalValue);
-        this.saveSignal();
-    } 
-    
-    initialData() {
-        let data = [];
-        for (let i = 0; i < 500; i++) {
-            let x = new Date();
-            let y = 0;
-            data.push([x,y]);
-        };
-        return data;
+      webglp.update();
     }
+  }
 
-    saveSignal() {
-        //console.log("Save Signal, indexpointer: ", this.indexPointer, this.props.bioSignalType,": ", this.props.bioSignalValue ); 
-        //console.log("saveSignal ", this.props.bioSignalType);
-        let x = new Date();
-        let y = Number(this.props.bioSignalValue);
-            this.tempData.push([x, y]);
-    }
+  function normalized(value) {
+    return (value - data.range[0]) / (data.range[1] - data.range[0]);
+  }
 
-    drawGraph() {
-        if(this.graph == null) {
+  const canvasStyle = { width: "100%", height: "150%" };
 
-            this.graph = new Dygraph(
-                this.refs.chart,
-                this.tempData,
-                {
-                    fillGraph: false,
-                    title: this.props.bioSignalType,
-                    labels: ['Time', 'Biosignal'],
-                    drawGrid: false,
-                    valueRange: [
-                        this.props.valueRangeMin , 
-                        this.props.valueRangeMax , 
-                    ],
-                    axisLineColor: "white",
-                    color: "blue",
-                    drawPoints: false,
-                    drawAxis: false,
-                    legend: "never",
-                });
-        } else {
-            let dygraphContainerOffsetWidth = document.getElementById('dygraph-container').offsetWidth
-            console.log("width: ",dygraphContainerOffsetWidth);
-            //display at most around 500 values depending on canvas width
-            //ToDo: lost values, e.g. if last update at length 97 and next at 103 and offset =100, values 97,98,99 will be lost because array reduced to size 100
-            if(this.tempData.length >= 500){
-                let valuesToBeRemoved = this.tempData.length-500;
-                //delete items from array to remain array.length at length of offsetWidth;
-                this.tempData.splice(0,valuesToBeRemoved);
-            }
-            this.graph.updateOptions( { 'file' : this.tempData} );
-        }
-    }
+  return (
+    <div className={className + ' ' + (warning ? 'warning-border' : '')}
+         style={{ color: `rgb(${color[0]}, ${color[1]}, ${color[2]})` }} >
+      <span>{label}</span>
+      <canvas style={canvasStyle} ref={canvasMain} />
+    </div>
+  );
 }
-
-export default GraphSignal;

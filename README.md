@@ -14,13 +14,7 @@ git clone https://github.com/cadus/remo2hbo_oktopus_frontend
 #### Install dependencies
 
 ```
-npm install
-```
-
-or
-
-```
-yarn
+yarn install
 ```
 
 ### Usage
@@ -28,49 +22,11 @@ yarn
 #### Run the app
 
 ```
-npm run start
-```
-
-or
-
-```
 yarn start
 ```
 
-#### Build the app (automatic)
+and with data stream simulation
 
 ```
-npm run package
+python3 datastream/stream_replay.py -b datastream/3chECG_bp_pulse_spo2.resampled.bin | yarn start
 ```
-
-or
-
-```
-yarn package
-```
-
-#### Build the app (manual)
-
-```
-npm run build
-```
-
-or
-
-```
-yarn build
-```
-
-#### Test the app (after `npm run build` || `yarn run build`)
-
-```
-npm run prod
-```
-
-```
-yarn prod
-```
-
-### Change app title
-
-Change the app title in the **webpack.build.config.js** and the **webpack.dev.config.js** files

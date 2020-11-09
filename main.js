@@ -29,8 +29,7 @@ function createMainWindow() {
       const string = buf.toString('utf-8', 12, currLength - 2);
       currLength = undefined
 
-			console.log(string, value)
-			mainWindow.webContents.send(string, value);
+			mainWindow.webContents.send(string, [value, timestamp]);
     }
 	});
 	process.stdin.resume();
